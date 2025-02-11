@@ -1,66 +1,119 @@
-## Foundry
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+---
 
-Foundry consists of:
+# **Crowdfunding  - Soulbound Token (SBT) Integration**  
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+## **Overview**  
+This is a **decentralized crowdfunding platform** , where charities can receive crypto donations, and donors are rewarded with **Soulbound Tokens (SBTs)**. These **non-transferable NFTs** represent donor reputation and achievements.  
 
-## Documentation
+## **Features**  
+✅ **Decentralized Crowdfunding** – Crypto donations to verified charities.  
+✅ **Soulbound Tokens (SBTs)** – Non-transferable NFTs tracking donor contributions.  
+✅ **Automated Donor Recognition** – SBTs dynamically update with each donation.  
+✅ **IPFS Metadata Storage** – Secure and decentralized donor data.  
+✅ **Built with Foundry** – Fast, efficient smart contract development.  
 
-https://book.getfoundry.sh/
+---
 
-## Usage
+## **Getting Started**  
 
-### Build
-
-```shell
-$ forge build
+### **1️⃣ Clone the Repository**  
+```sh
+git clone git@github.com:FadhilMulinya/Crowdfunding.git
+cd Crowdfunding
 ```
 
-### Test
-
-```shell
-$ forge test
+### **2️⃣ Install Dependencies**  
+Ensure you have **Foundry** installed:  
+```sh
+curl -L https://foundry.paradigm.xyz | bash
+foundryup
 ```
 
-### Format
-
-```shell
-$ forge fmt
+### **3️⃣ Install OpenZeppelin Contracts**  
+Run the script to install **OpenZeppelin** dependencies:  
+```sh
+forge install OpenZeppelin/openzeppelin-contracts
 ```
 
-### Gas Snapshots
-
-```shell
-$ forge snapshot
+### **4️⃣ Set Up Remappings**  
+Ensure your `remappings.txt` file includes:  
+```
+@openzeppelin/=lib/openzeppelin-contracts/
 ```
 
-### Anvil
-
-```shell
-$ anvil
+Alternatively, generate it automatically:  
+```sh
+forge remappings > remappings.txt
 ```
 
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
+### **5️⃣ Compile the Contracts**  
+```sh
+forge build
 ```
 
-### Cast
-
-```shell
-$ cast <subcommand>
+### **6️⃣ Run Tests**  
+```sh
+forge test
 ```
 
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
+### **7️⃣ Deploy the Contracts**  
+To deploy on a testnet:  
+```sh
+forge script script/Deploy.s.sol --rpc-url <NETWORK_RPC_URL> --private-key <YOUR_PRIVATE_KEY> --broadcast
 ```
+Replace `<NETWORK_RPC_URL>` and `<YOUR_PRIVATE_KEY>` with the appropriate values.
+
+---
+
+## **How It Works**  
+
+### **Soulbound Tokens (SBTs)**
+- Donors receive an **SBT** upon their first donation.  
+- The **SBT cannot be transferred**, ensuring it remains linked to the donor’s reputation.  
+- **Metadata includes:**  
+  - **Total donations**  
+  - **Donation count**  
+  - **Donor level** (**Bronze → Silver → Gold → Platinum → Diamond**)  
+  - **Last donation timestamp**  
+
+### **Donation Processing**
+- When a donor contributes, their SBT is **minted or updated automatically**.  
+- SBT **levels increase** as donations accumulate.  
+
+---
+
+## **Smart Contracts**  
+
+| Contract        | Purpose |
+|----------------|---------|
+| `SBTContract.sol` | Manages **Soulbound Tokens** for donors. |
+| `Crowdfunding.sol` | Handles **donations, charities, and SBT updates**. |
+
+---
+
+## **Interacting with the Contracts**  
+
+### **Using Foundry Console**
+1. **Mint an SBT**  
+   ```sh
+   cast send <SBT_CONTRACT> "mintSBT(address,string)" <DONOR_ADDRESS> "<IPFS_HASH>" --rpc-url <NETWORK_RPC_URL> --private-key <YOUR_PRIVATE_KEY>
+   ```
+2. **Update SBT after a donation**  
+   ```sh
+   cast send <SBT_CONTRACT> "updateSBT(uint256,uint256)" <TOKEN_ID> <DONATION_AMOUNT> --rpc-url <NETWORK_RPC_URL> --private-key <YOUR_PRIVATE_KEY>
+   ```
+3. **Get Donor Metadata**  
+   ```sh
+   cast call <SBT_CONTRACT> "getDonorMetadata(address)" <DONOR_ADDRESS> --rpc-url <NETWORK_RPC_URL>
+   ```
+
+---
+
+## **Contributing**  
+🙌 Contributions are welcome! Fork the repo, create a branch, and submit a PR.  
+
+## **License**  
+📝 **MIT License** - Open for all!  
+
+---
